@@ -2,7 +2,9 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/internal/handlers/authHandler.go" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/internal/handlers/profileHandler.go" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/internal/repository/authRepo.go" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/internal/repository/profileRepo.go" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/internal/validators/userValidator.go" dialect="GenericSQL" />
   </component>
 </project>

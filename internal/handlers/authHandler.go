@@ -5,18 +5,12 @@ import (
 	"GoSocial/internal/repository"
 	"GoSocial/internal/validators"
 	"github.com/go-playground/validator/v10"
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
 	"net/http"
 	"time"
 )
-
-type jwtCustomClaims struct {
-	Username string `json:"username"`
-	Admin    bool   `json:"user"`
-	jwt.RegisteredClaims
-}
 
 func Login(c echo.Context) error {
 	email := c.FormValue("email")
@@ -28,17 +22,16 @@ func Login(c echo.Context) error {
 		return echo.ErrNotFound
 	}
 
-	claims := &jwtCustomClaims{
-		"Alexander Pistoletov",
-		false,
-		jwt.RegisteredClaims{
+	claims := &models.JwtCustomClaims{
+		Username: "Alexander Pistoletov",
+		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72)),
 		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	t, err := token.SignedString([]byte("secret"))
+	t, err := token.SignedString([]byte("very-secret-jwt-key"))
 	if err != nil {
 		return err
 	}
