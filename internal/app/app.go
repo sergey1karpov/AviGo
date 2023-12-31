@@ -27,8 +27,9 @@ func Start() {
 		SigningKey: []byte("very-secret-jwt-key"),
 	}
 	r.Use(echojwt.WithConfig(config))
-	
+
 	r.GET("/:id", handlers.GetUser)
+	r.PATCH("/:id/update-profile", handlers.EditUser)
 
 	e.Logger.Fatal(e.Start(":3336"))
 }
