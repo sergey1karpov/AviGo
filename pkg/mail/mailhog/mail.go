@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"log"
 	"net/smtp"
+	"strings"
+	"time"
 )
 
-func SendMail(to string) {
+func SendMail(to, template string) {
 	smtpHost := "localhost"
 	smtpPort := 1025
 	smtpAddr := fmt.Sprintf("%s:%d", smtpHost, smtpPort)
@@ -14,11 +16,14 @@ func SendMail(to string) {
 	from := "avigo@support.com"
 
 	subject := "Привет, мир!"
-	body := "Это тело письма."
 
-	message := []byte("Subject: " + subject + "\r\n" +
-		"\r\n" +
-		body + "\r\n")
+	htmlBody := strings.ReplaceAll(strings.ReplaceAll(template, "{LINK}", "<a href=\"/login\">Login Page</a>"), "{YEAR}", fmt.Sprintf("%d", time.Now().Year()))
+
+	message := []byte("To: " + to + "\r\n" +
+		"From: " + from + "\r\n" +
+		"Subject: " + subject + "\r\n" +
+		"MIME-version: 1.0;\r\nContent-Type: text/html; charset=\"UTF-8\";\r\n\r\n" +
+		htmlBody + "\r\n")
 
 	auth := smtp.PlainAuth("", "", "", smtpHost)
 
