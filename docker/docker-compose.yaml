@@ -1,6 +1,5 @@
 version: '3'
 services:
-  #PostgreSQL
   postgres:
     image: postgres
     hostname: postgres
@@ -14,7 +13,6 @@ services:
     networks:
       - go
     restart: unless-stopped
-  #PGAdmin
   pgadmin:
     image: dpage/pgadmin4
     environment:
@@ -27,6 +25,29 @@ services:
     restart: unless-stopped
     depends_on:
       - postgres
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "1025:1025" # smtp server
+      - "8025:8025" # web ui
+    networks:
+      - go
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+    networks:
+      - go
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+    networks:
+      - go
 networks:
   go:
     ipam:

@@ -10,8 +10,8 @@ func Reg(username, email, password string) (*models.User, error) {
 	defer db.Close()
 
 	user := models.User{Username: username, Email: email, Password: password}
-	query := "INSERT INTO users (username, email, password) VALUES($1, $2, $3)"
-	_, err := db.Exec(query, user.Username, user.Email, user.Password)
+	query := "INSERT INTO users (username, email, password) VALUES($1, $2, $3) RETURNING id"
+	err := db.QueryRow(query, user.Username, user.Email, user.Password).Scan(&user.Id)
 
 	return &user, err
 }

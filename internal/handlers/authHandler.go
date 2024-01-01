@@ -4,6 +4,7 @@ import (
 	"GoSocial/internal/models"
 	"GoSocial/internal/repository"
 	"GoSocial/internal/validators"
+	"GoSocial/pkg/mail/mailhog"
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
@@ -46,6 +47,8 @@ func Registration(c echo.Context) error {
 	username := c.FormValue("username")
 	email := c.FormValue("email")
 	password, _ := models.EncryptPassword(c.FormValue("password"))
+
+	defer mailhog.SendMail(email)
 
 	err := validators.UserRegValidation(username, email, password)
 
