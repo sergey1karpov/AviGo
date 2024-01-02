@@ -21,7 +21,7 @@ func FindUser(email, password string) (*models.User, error) {
 	defer db.Close()
 
 	u := models.User{}
-	err := db.QueryRow("SELECT username, email, password FROM users WHERE email = $1", email).Scan(&u.Username, &u.Email, &u.Password)
+	err := db.QueryRow("SELECT id, username, email, password FROM users WHERE email = $1", email).Scan(&u.Id, &u.Username, &u.Email, &u.Password)
 
 	hashPass := &u.Password
 

@@ -10,7 +10,7 @@ func GetUser(id int) (*models.User, error) {
 	defer db.Close()
 
 	user := models.User{}
-	err := db.QueryRow("SELECT * FROM users WHERE id = $1", id).Scan(&user.Id, &user.Username, &user.Email, &user.Password, &user.Role)
+	err := db.QueryRow("SELECT * FROM users WHERE id = $1", id).Scan(&user.Id, &user.Username, &user.Password, &user.Email, &user.Role)
 
 	return &user, err
 }
@@ -32,4 +32,18 @@ func UpdUser(id int, data map[string][]string) (*models.User, error) {
 	}
 
 	return &user, err
+}
+
+func DelUser(id int) error {
+	db, _ := transport.ConnectDB()
+	defer db.Close()
+
+	stm := `DELETE FROM users WHERE id = $1`
+	_, err := db.Exec(stm, id)
+
+	if err != nil {
+		return err
+	}
+
+	return err
 }

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"GoSocial/internal/repository"
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
@@ -13,6 +14,13 @@ var lock sync.Mutex
 // GetUser Get user profile from database/*
 func GetUser(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
+
+	tokenId := c.Get("userId").(float64)
+	intTokenId := int(tokenId)
+
+	if id != intTokenId {
+		return echo.ErrForbidden
+	}
 
 	user, err := repository.GetUser(id)
 
@@ -29,6 +37,13 @@ func GetUser(c echo.Context) error {
 
 func EditUser(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
+
+	tokenId := c.Get("userId").(float64)
+	intTokenId := int(tokenId)
+
+	if id != intTokenId {
+		return echo.ErrForbidden
+	}
 
 	user, err := repository.GetUser(id)
 
@@ -48,6 +63,25 @@ func EditUser(c echo.Context) error {
 	})
 }
 
-func DeleteUser() {
+func DeleteUser(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
 
+	tokenId := c.Get("userId").(float64)
+	intTokenId := int(tokenId)
+
+	if id != intTokenId {
+		return echo.ErrForbidden
+	}
+
+	err := repository.DelUser(id)
+
+	fmt.Println(err)
+
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"message": fmt.Sprintf("User with id %d deleted", id),
+	})
 }

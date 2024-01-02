@@ -6,6 +6,7 @@ import (
 	"GoSocial/internal/validators"
 	"GoSocial/pkg/mail/mailhog"
 	"GoSocial/pkg/mail/templates"
+	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
@@ -20,12 +21,15 @@ func Login(c echo.Context) error {
 
 	user, _ := repository.FindUser(email, password)
 
+	fmt.Println(user)
+
 	if user == nil {
 		return echo.ErrNotFound
 	}
 
 	claims := &models.JwtCustomClaims{
-		Username: "Alexander Pistoletov",
+		UserId:   user.Id,
+		Username: user.Username,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72)),
 		},
