@@ -28,8 +28,11 @@ func Start() {
 		SigningKey: []byte("very-secret-jwt-key"),
 	}
 	r.Use(echojwt.WithConfig(config))
+
+	//Проверка на права пользователя
 	r.Use(customMiddleware.AuthMiddleware)
 
+	//Личный кабинет(профиль, обновление, удаление)
 	r.GET("/:id", handlers.GetUser)
 	r.PATCH("/:id/update-profile", handlers.EditUser)
 	r.DELETE("/:id/delete-profile", handlers.DeleteUser)

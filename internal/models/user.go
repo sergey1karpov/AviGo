@@ -10,7 +10,23 @@ type User struct {
 	Role     string `json:"role"`
 }
 
-func EncryptPassword(password string) (string, error) {
+//func EncryptPassword(password string) (string, error) {
+//	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+//	if err != nil {
+//
+//		return "", err
+//	}
+//
+//	return string(hashedPassword), nil
+//}
+
+//func ComparePasswords(hashedPassword, password []byte) error {
+//	return bcrypt.CompareHashAndPassword(hashedPassword, password)
+//}
+
+//Замена на приемник
+
+func (u *User) EncryptPassword(password string) (string, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 
@@ -20,6 +36,6 @@ func EncryptPassword(password string) (string, error) {
 	return string(hashedPassword), nil
 }
 
-func ComparePasswords(hashedPassword, password []byte) error {
+func (u *User) ComparePasswords(hashedPassword, password []byte) error {
 	return bcrypt.CompareHashAndPassword(hashedPassword, password)
 }

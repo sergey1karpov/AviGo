@@ -15,6 +15,8 @@ import (
 	"time"
 )
 
+var user = models.User{}
+
 func Login(c echo.Context) error {
 	email := c.FormValue("email")
 	password := c.FormValue("password")
@@ -51,7 +53,7 @@ func Login(c echo.Context) error {
 func Registration(c echo.Context) error {
 	username := c.FormValue("username")
 	email := c.FormValue("email")
-	password, _ := models.EncryptPassword(c.FormValue("password"))
+	password, _ := user.EncryptPassword(c.FormValue("password"))
 
 	template := templates.Welcome()
 	defer mailhog.SendMail(email, template)

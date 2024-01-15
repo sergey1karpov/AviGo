@@ -5,6 +5,8 @@ import (
 	"GoSocial/internal/transport"
 )
 
+var user = models.User{}
+
 func Reg(username, email, password string) (*models.User, error) {
 	db, _ := transport.ConnectDB()
 	defer db.Close()
@@ -25,7 +27,7 @@ func FindUser(email, password string) (*models.User, error) {
 
 	hashPass := &u.Password
 
-	err = models.ComparePasswords([]byte(*hashPass), []byte(password))
+	err = user.ComparePasswords([]byte(*hashPass), []byte(password))
 
 	if err != nil {
 		return nil, err
